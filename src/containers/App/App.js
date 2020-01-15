@@ -15,12 +15,12 @@ export class App extends Component {
 
   signOut = async () => {
     try {
-      const { removeUser, clearMessages, hasErrored } = this.props;
+      const { removeUser, clearMessages } = this.props;
       await endConversation();
       removeUser();
       clearMessages();
     } catch({ message }) {
-      hasErrored(message);
+      this.props.hasErrored(message);
     }
   }
 
@@ -37,7 +37,7 @@ export class App extends Component {
 }
 
 export const mapStateToProps = ({ user }) => ({
-  user,
+  user
 });
 
 export const mapDispatchToProps = dispatch =>  bindActionCreators({ removeUser, hasErrored, clearMessages }, dispatch);

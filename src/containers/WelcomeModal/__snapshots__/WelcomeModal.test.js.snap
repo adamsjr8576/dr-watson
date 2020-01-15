@@ -61,6 +61,7 @@ exports[`WelcomeModal component should display an error message if not all of th
   </select>
   <button
     onClick={[Function]}
+    type="button"
   >
     Take 5 minutes to check in!
   </button>
@@ -123,6 +124,7 @@ exports[`WelcomeModal component should match the snapshot if there are no errors
   </select>
   <button
     onClick={[Function]}
+    type="button"
   >
     Take 5 minutes to check in!
   </button>
