@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { ChatBox, mapStateToProps, mapDispatchToProps } from './ChatBox';
-import { hasErrored, addMessage } from '../../actions';
+import { hasErrored, addMessage, clearError } from '../../actions';
 import { postMessage } from '../../apiCalls';
 
 jest.mock('../../apiCalls');
@@ -10,6 +10,7 @@ describe('ChatBox component', () => {
   let wrapper
   const mockHasErrored = jest.fn();
   const mockAddMessage = jest.fn();
+  const mockClearError = jest.fn();
   const mockMessages = [
     {
       message: "Hello, I am Dr. Watson.  My understanding is that you are feeling tired.  Have you been feeling anxious this week?",
@@ -25,6 +26,7 @@ describe('ChatBox component', () => {
     wrapper = shallow(<ChatBox
       messages={mockMessages}
       hasErrored={mockHasErrored}
+      clearError={mockClearError}
     />);
   });
 
@@ -58,6 +60,7 @@ describe('ChatBox component', () => {
       addMessage={mockAddMessage}
       messages={mockMessages}
       hasErrored={mockHasErrored}
+      clearError={mockClearError}
     />);
     wrapper.instance().messageChatBot = jest.fn();
 
@@ -73,6 +76,7 @@ describe('ChatBox component', () => {
       addMessage={mockAddMessage}
       messages={mockMessages}
       hasErrored={mockHasErrored}
+      clearError={mockClearError}
     />);
     wrapper.instance().messageChatBot = jest.fn();
 
@@ -81,6 +85,7 @@ describe('ChatBox component', () => {
 
     expect(wrapper.state('message')).toEqual('');
     expect(wrapper.instance().messageChatBot).toHaveBeenCalled();
+    expect(mockClearError).toHaveBeenCalled();
   });
 
   it('should call postMessage and addMessage when calling messageChatBot', async () => {
@@ -164,6 +169,16 @@ describe('mapDispatchToProps', () => {
 
     const mappedProps = mapDispatchToProps(mockDispatch);
     mappedProps.addMessage(mockMessage, mockIsUser);
+
+    expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
+  });
+
+  it('calls dispatch with a clearError action when clearError is called', () => {
+    const mockDispatch = jest.fn();
+    const actionToDispatch = clearError();
+
+    const mappedProps = mapDispatchToProps(mockDispatch);
+    mappedProps.clearError();
 
     expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
   });

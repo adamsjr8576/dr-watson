@@ -38,6 +38,15 @@ describe('actions', () => {
     expect(result).toEqual(expectedAction);
   });
 
+  it('should have a type of CLEAR_ERROR', () => {
+    const expectedAction = {
+      type: 'CLEAR_ERROR'
+    }
+    const result = actions.clearError();
+
+    expect(result).toEqual(expectedAction);
+  });
+
   it('should have a type of ADD_MESSAGE', () => {
     const message = 'Hello, I am Dr. Watson';
     const isUser = true;

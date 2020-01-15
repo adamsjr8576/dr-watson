@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { App, mapStateToProps, mapDispatchToProps } from './App';
-import { removeUser, hasErrored, clearMessages } from '../../actions';
+import { removeUser, hasErrored, clearMessages, clearError } from '../../actions';
 import { endConversation } from '../../apiCalls';
 
 jest.mock('../../apiCalls');
@@ -10,6 +10,7 @@ describe('App component', () => {
   const mockRemoveUser = jest.fn();
   const mockHasErrored = jest.fn();
   const mockClearMessages = jest.fn();
+  const mockClearError = jest.fn();
   let wrapper;
 
   beforeEach(() => {
@@ -25,6 +26,7 @@ describe('App component', () => {
         removeUser={mockRemoveUser}
         hasErrored={mockHasErrored}
         clearMessages={mockClearMessages}
+        clearError={mockClearError}
     />);
   });
 
@@ -37,18 +39,20 @@ describe('App component', () => {
       user={null}
       removeUser={mockRemoveUser}
       hasErrored={mockHasErrored}
+      clearError={mockClearError}
     />);
 
     expect(wrapper).toMatchSnapshot();
   });
 
 
-  it('should call endConversation, and removeUser if someone signs out', async () => {
+  it('should call endConversation, removeUser and clearError if someone signs out', async () => {
     await wrapper.instance().signOut();
 
     expect(endConversation).toHaveBeenCalled();
     expect(mockRemoveUser).toHaveBeenCalled();
     expect(mockClearMessages).toHaveBeenCalled();
+    expect(mockClearError).toHaveBeenCalled();
   });
 
   it('should call hasErrored if endCoversation does not resolve when a user signs out', async () => {
@@ -116,6 +120,16 @@ describe('mapDispatchToProps', () => {
 
     const mappedProps = mapDispatchToProps(mockDispatch);
     mappedProps.clearMessages();
+
+    expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
+  });
+
+  it('calls dispatch with a clearError action when clearError is called', () => {
+    const mockDispatch = jest.fn();
+    const actionToDispatch = clearError();
+
+    const mappedProps = mapDispatchToProps(mockDispatch);
+    mappedProps.clearError();
 
     expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
   });
